@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}TrainMaster{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+    /* Кастомные стили для логотипа */
+    .navbar-brand-custom {
+      font-size: 5rem; /* Увеличиваем размер текста */
+      margin-left: 0; /* Убираем отступ слева */
+      padding-left: 0; /* Убираем внутренний отступ */
+    }
+    .navbar-brand-custom .bi-train-front-fill {
+      font-size: 5em; /* Увеличиваем иконку */
+      margin-right: 0.5rem; /* Отступ между иконкой и текстом */
+      vertical-align: middle; /* Выравнивание по вертикали */
+    }
+  </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
+        <i class="bi bi-train-front-fill me-2"></i>TrainMaster
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav me-auto">
+          {% if current_user.is_authenticated %}
+            <!-- Все ссылки для залогиненного пользователя -->
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_locomotive') }}">Создать поезд</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_wagons') }}">Добавить вагоны</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_stations') }}">Добавить станции</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('add_passengers') }}">Добавить пассажиров</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('trains') }}">Поезда</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('passengers') }}">Пассажиры</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('end_trip') }}">Завершить поездку</a></li>
+          {% endif %}
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-light ms-2" href="{{ url_for('logout') }}">Выйти</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-primary ms-2" href="{{ url_for('login') }}">Вход</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-primary ms-2" href="{{ url_for('register') }}">Регистрация</a>
+            </li>
+          {% endif %}
+        </ul>
+
+
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

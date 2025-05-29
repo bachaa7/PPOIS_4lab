@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Добавить маршрут{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Добавление станций маршрута</h2>
+  <form method="POST" id="station-form">
+    <div class="mb-3">
+      <label for="train_id" class="form-label">Выберите поезд:</label>
+      <select class="form-control" name="train_id" id="train_id" required>
+        {% for train in trains %}
+          <option value="{{ train.id }}">Поезд {{ train.id }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="count" class="form-label">Количество станций:</label>
+      <input type="number" class="form-control" name="count" id="count" min="2" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="generateStationFields()">Продолжить</button>
+    <div id="station-fields" class="mt-4"></div>
+    <button type="submit" class="btn btn-success mt-3 d-none" id="submit-btn">Сохранить маршрут</button>
+  </form>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalLabel">Успешно</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body text-center">
+        {{ message }}
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a href="{{ url_for('index') }}" class="btn btn-dark">На главную</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function generateStationFields() {
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('station-fields');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `
+        <h5>Станция ${i + 1}</h5>
+        <div class="mb-3">
+            <label>Название станции</label>
+            <input type="text" class="form-control" name="name_${i}" required>
+        </div>
+        ${i === 0 ? `
+        <div class="mb-3">
+            <label>Время отправления</label>
+            <input type="time" class="form-control" name="departure_${i}" required>
+        </div>` : i === count - 1 ? `
+        <div class="mb-3">
+            <label>Время прибытия</label>
+            <input type="time" class="form-control" name="arrival_${i}" required>
+        </div>` : `
+        <div class="mb-3">
+            <label>Время прибытия</label>
+            <input type="time" class="form-control" name="arrival_${i}" required>
+        </div>
+        <div class="mb-3">
+            <label>Время отправления</label>
+            <input type="time" class="form-control" name="departure_${i}" required>
+        </div>`}
+        <hr>`;
+    }
+    document.getElementById('submit-btn').classList.remove('d-none');
+}
+</script>
+
+{% if message %}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    var modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+  });
+</script>
+{% endif %}
+{% endblock %}

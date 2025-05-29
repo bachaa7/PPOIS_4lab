@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Пассажиры{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Список пассажиров</h2>
+  {% if passengers %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Имя</th>
+          <th>Станции</th>
+          <th>Вагон</th>
+          <th>Цена</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in passengers %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.ticket.from_station }} → {{ p.ticket.to_station }}</td>
+          <td>№{{ p.ticket.wagon.id }}</td>
+          <td>{{ p.ticket.price }}₽</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Пассажиров пока нет.</p>
+  {% endif %}
+</div>
+{% endblock %}

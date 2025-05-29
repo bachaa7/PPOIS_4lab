@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Поезда{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Все поезда</h2>
+  {% if trains %}
+    <ul class="list-group">
+      {% for train in trains %}
+      <li class="list-group-item">
+        <strong>Поезд №{{ train.id }}</strong><br>
+        Локомотив:
+        {% if train.locomotive %}
+          {{ train.locomotive.model }} ({{ train.locomotive.drive_type }})
+        {% else %}
+          <em>не назначен</em>
+        {% endif %}<br>
+        Вагонов: {{ train.wagons|length }}<br>
+        {% if train.stations %}
+        Маршрут:
+          {% for station in train.stations|sort(attribute='order') %}
+            {{ station.name }}{% if not loop.last %} → {% endif %}
+          {% endfor %}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Нет поездов для отображения.</p>
+  {% endif %}
+</div>
+{% endblock %}

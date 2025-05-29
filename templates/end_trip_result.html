@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Поездка завершена{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>🚉 Поездка №{{ train_id }} завершена!</h2>
+  <p>Всего пассажиров: <strong>{{ total_passengers }}</strong></p>
+  <p>Общая выручка: <strong>{{ total_income }}₽</strong></p>
+  <a href="{{ url_for('index') }}" class="btn btn-dark mt-3">На главную</a>
+</div>
+{% endblock %}

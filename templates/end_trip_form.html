@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Завершить поездку{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Завершить поездку</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="train_id" class="form-label">Выберите поезд:</label>
+      <select class="form-control" name="train_id" id="train_id" required>
+        {% for train in trains %}
+          <option value="{{ train.id }}">Поезд №{{ train.id }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-danger">Завершить</button>
+  </form>
+</div>
+{% endblock %}

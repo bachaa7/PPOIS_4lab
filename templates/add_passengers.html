@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Добавление пассажиров{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Добавить пассажиров</h2>
+  <form method="POST" id="passenger-form">
+
+    <div class="mb-3">
+    <label for="train_id" class="form-label">Выберите поезд:</label>
+    <select class="form-control" name="train_id" id="train_id" required>
+      {% for train in trains %}
+        <option value="{{ train.id }}">Поезд {{ train.id }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+    <div class="mb-3">
+      <label>Количество пассажиров:</label>
+      <input type="number" class="form-control" id="count" name="count" min="1" required>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="generatePassengerFields()">Продолжить</button>
+
+    <div id="passenger-fields" class="mt-4"></div>
+    <button type="submit" class="btn btn-success mt-3 d-none" id="submit-btn">Посадить пассажиров</button>
+  </form>
+</div>
+
+<script>
+const wagons = {{ wagons|tojson }};
+const stations = {{ stations|tojson }};
+
+function generatePassengerFields() {
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('passenger-fields');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        let wagonOptions = wagons.map((w, idx) =>
+            `<option value="${idx}">Вагон ${idx+1} (${w.capacity - w.occupied} мест)</option>`
+        ).join('');
+
+        let stationOptions = stations.map(s =>
+            `<option value="${s.name}">${s.name}</option>`
+        ).join('');
+
+        container.innerHTML += `
+        <h5>Пассажир ${i + 1}</h5>
+        <div class="mb-3">
+            <label>Имя:</label>
+            <input type="text" class="form-control" name="name_${i}" required>
+        </div>
+        <div class="mb-3">
+            <label>Станция отправления:</label>
+            <select class="form-control" name="from_station_${i}" required>${stationOptions}</select>
+        </div>
+        <div class="mb-3">
+            <label>Станция прибытия:</label>
+            <select class="form-control" name="to_station_${i}" required>${stationOptions}</select>
+        </div>
+        <div class="mb-3">
+            <label>Выберите вагон:</label>
+            <select class="form-control" name="wagon_${i}" required>${wagonOptions}</select>
+        </div>
+        <hr>`;
+    }
+    document.getElementById('submit-btn').classList.remove('d-none');
+}
+</script>
+{% endblock %}

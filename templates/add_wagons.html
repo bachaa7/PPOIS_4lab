@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Добавить вагоны{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Добавление вагонов</h2>
+  <form method="POST" id="wagon-form">
+    <div class="mb-3">
+      <label for="train_id" class="form-label">Выберите поезд</label>
+      <select name="train_id" id="train_id" class="form-select" required>
+        {% for train in trains %}
+          {% if train.locomotive %}
+            <option value="{{ train.id }}">
+              Поезд №{{ train.id }} — {{ train.locomotive.model }}
+            </option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="count" class="form-label">Сколько вагонов добавить?</label>
+      <input type="number" class="form-control" id="count" name="count" min="1" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="generateFields()">Продолжить</button>
+
+    <div id="wagon-fields" class="mt-4"></div>
+    <button type="submit" class="btn btn-success mt-3 d-none" id="submit-btn">Сохранить</button>
+  </form>
+</div>
+
+<script>
+function generateFields() {
+    const count = parseInt(document.getElementById('count').value);
+    const container = document.getElementById('wagon-fields');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `
+        <h5 class="mt-3">Вагон ${i + 1}</h5>
+        <div class="mb-3">
+            <label>ID вагона</label>
+            <input type="text" class="form-control" name="id_${i}" required>
+        </div>
+        <div class="mb-3">
+            <label>Вместимость</label>
+            <input type="number" class="form-control" name="capacity_${i}" required>
+        </div>
+        <div class="mb-3">
+            <label>Цена билета</label>
+            <input type="number" step="0.01" class="form-control" name="price_${i}" required>
+        </div>`;
+    }
+    document.getElementById('submit-btn').classList.remove('d-none');
+}
+</script>
+{% endblock %}

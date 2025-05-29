@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Добавить локомотив{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Добавить локомотив</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="model" class="form-label">Модель</label>
+      <input type="text" class="form-control" name="model" id="model" required>
+    </div>
+    <div class="mb-3">
+      <label for="drive_type" class="form-label">Тип привода</label>
+      <select class="form-select" name="drive_type" id="drive_type" required>
+        <option value="Электровоз">Электровоз</option>
+        <option value="Тепловоз">Тепловоз</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalLabel">Успех</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body text-center">
+        {{ message }}
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a href="{{ url_for('index') }}" class="btn btn-dark">На главную</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if message %}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    var modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+  });
+</script>
+{% endif %}
+{% endblock %}
